@@ -1,24 +1,26 @@
 # Why there is no front end
 
-FarmIQ is a database with a subscription. The tables underneath it are ordinary: a few entities, a few relationships, a handful of workflows you repeat every week. What you pay for is the layer on top that lets people who do not write SQL get at those tables. Screens, filters, dashboards, forms.
-
-That layer used to be the whole product, because talking to a database was hard. It is not hard any more. Open this folder in Claude Code, describe what you want, and it writes the query, runs it, and explains the answer. Ask a question the dashboard never had a chart for and you still get an answer.
+FarmIQ is a farm record database with a map, a phone app and a set of screens on top. The records underneath are ordinary: paddocks, mobs, animals, stock changes, treatments, fertiliser, sprays, hazards and a diary. The screens were needed because a database was hard to talk to. It is not hard any more. Open this folder in Claude Code, ask in plain words, and it runs the query and explains the answer, including questions no report was built for.
 
 ## What you gain
 
-- **Better answers.** A dashboard shows what the vendor decided to chart. Here you ask your own question, in your own words, and get it answered against your own data.
-- **No seats.** Everyone who needs to look can look. The bill does not grow with headcount.
-- **Your data in your Postgres.** Plain tables. Back them up, query them from anything, leave any time. There is no export step because there is nothing to leave.
-- **A process that matches you.** When your way of working changes, you add a command. You do not wait for a feature request to clear.
+- **Answers to your own questions.** "Which steers clear withholding before the works date, and do they have an ASD?" is one question here, not three reports.
+- **Rules that stop the mistake.** A sale plan will not release inside a withholding period. A mob will not move onto a sprayed paddock. A treatment will not save with an expired product.
+- **Your records in your database.** Plain tables you back up, query from anything and keep when you leave. No per-farm fee.
+- **A system that changes with the farm.** A new field, a new rule or a new report is a sentence to `/customise`.
 
-## What you give up
+## What a screen gives that this does not
 
-- **A visual board.** Stages are a table you ask about, not cards you drag.
-- **A phone app.** It runs where Claude Code runs.
-- **A vendor help desk.** This is open source. Enterprise DNA supports the installed version for businesses that want someone to call.
+- **A phone in the paddock, offline.** FarmIQ's app records in the paddock without signal. This runs where Claude Code runs: the office, a laptop in the ute.
+- **A farm map.** Paddocks here are names and areas, not shapes on an aerial photo. There is no map-based reporting.
+- **Feeds from other systems.** No kill-sheet import, no NAIT connection, no bank or accounting link, no EID reader or scales connection.
+- **Drag and drop.** Mobs move by command, not by dragging.
+- **A vendor help desk.** This is open source. Enterprise DNA supports the version it installs.
+
+Every item on that list is something Enterprise DNA builds into your own version when your farm needs it: a phone form for the team, a map, a kill-sheet import, a connection to your EID reader.
 
 ## Who this fits
 
-Small teams who already use Claude Code, or who would rather learn to ask than learn another interface. If your team needs a screen to look at all day, keep FarmIQ. If you need the answers more than the screens, this is cheaper, faster and yours.
+A farm office that already keeps the records and wants them answering questions and catching mistakes, and an owner who would rather own the records than rent the screens. If your team needs a phone app all day and nobody wants to ask questions, stay on FarmIQ or have us build the phone side.
 
 Installed and run for you: https://enterprisedna.co/omni/instead-of/farmiq

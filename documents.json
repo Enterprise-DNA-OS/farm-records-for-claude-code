@@ -1,11 +1,40 @@
 [
   {
-    "name": "example",
-    "title": "TODO(author): the first document this industry must produce",
-    "for_each": "select gen_random_uuid() as id, 'Example' as name",
+    "name": "treatment-record",
+    "title": "Animal health treatment record",
+    "for_each": "select id, name from mobs",
     "file": "name",
     "sections": [
-      { "title": "Details", "sql": "select 'replace me' as item, $1::text as record_id" }
+      {
+        "title": "Treatments",
+        "sql": "select product, batch, acvm_number, treated_on, head, dose_ml, operator, whp_days, whp_clear from treatment_register where mob = (select name from mobs where id = $1) order by treated_on",
+        "note": "The product label and your vet's directions govern treatment. Demo withholding periods are fictional."
+      }
+    ]
+  },
+  {
+    "name": "asd-worksheet",
+    "title": "ASD preparation worksheet",
+    "for_each": "select id, name from sale_plans where status = 'planned'",
+    "file": "name",
+    "sections": [
+      { "title": "Readiness", "sql": "select name, mob, sale_date, head, destination, whp_clear, decision from sale_readiness where id = $1", "note": "A working sheet for filling in the ASD. It is not the ASD and it does not record anything in NAIT." },
+      { "title": "Treatments still within withholding on the sale date", "sql": "select t.product, t.treated_on, t.whp_days, t.whp_clear from treatment_register t join sale_plans sp on sp.id = $1 join mobs m on m.id = sp.mob_id where t.mob = m.name and (t.whp_clear is null or t.whp_clear > sp.sale_date)" },
+      { "title": "Destination", "sql": "select destination, destination_nait, asd_ref, status from sale_plans where id = $1" }
+    ]
+  },
+  {
+    "name": "audit-pack",
+    "title": "Farm assurance and farm plan working pack",
+    "for_each": "select id, name from farms",
+    "file": "name",
+    "sections": [
+      { "title": "The farm", "sql": "select name, nait_number, region, ffp_status, ffp_due, nzfap_audit_due, nait_declared_on from farms where id = $1" },
+      { "title": "Findings", "sql": "select rule, record, issue, source from compliance_findings where $1::uuid is not null order by rule, record", "note": "Missing or late records in this database. Not an audit result." },
+      { "title": "Stock on hand", "sql": "select name, species, paddock, head, history_verified, whp_clear from mob_summary where farm_id = $1 order by name" },
+      { "title": "Nitrogen this season", "sql": "select n.paddock, n.land_use, n.n_kg_ha, n.cap_kg_ha, n.decision from nitrogen_board n join paddocks p on p.id = n.id where p.farm_id = $1 order by n.n_kg_ha desc" },
+      { "title": "Farm plan actions", "sql": "select name, risk, due, status, evidence from ffp_actions where farm_id = $1 order by due" },
+      { "title": "Hazards", "sql": "select name, location, controls, owner, reviewed_on from hazards where farm_id = $1 order by name" }
     ]
   }
 ]

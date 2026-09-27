@@ -1,14 +1,38 @@
 [
   {
     "name": "week",
-    "title": "This week",
-    "subtitle": "Farm Records for Claude Code: what needs attention, rendered by npm run view",
+    "title": "This week on the farm",
+    "subtitle": "What needs a decision, what is booked to go, and what NAIT is waiting on",
     "sections": [
-      {
-        "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
-      }
+      { "title": "Decisions", "sql": "select priority, kind, record, issue from attention_board order by priority, kind, record" },
+      { "title": "Stock booked to go", "sql": "select name, mob, sale_date, head, destination, whp_clear, decision from sale_readiness order by sale_date" },
+      { "title": "NAIT movements", "sql": "select mob, kind, event_date, head, other_nait, due, nait_recorded_on, status from nait_movements order by event_date desc" }
+    ]
+  },
+  {
+    "name": "grazing",
+    "title": "Grazing round",
+    "sections": [
+      { "title": "Paddocks", "sql": "select paddock, area_ha, head, su_per_ha, cover_kg_dm, cover_age_days, rest_so_far, rest_days, decision from grazing_board order by paddock" },
+      { "title": "Recent sprays", "sql": "select p.name paddock, s.applied_on, s.product, s.grazing_whp_days, s.applied_on + s.grazing_whp_days grazing_clear from sprays s join paddocks p on p.id = s.paddock_id order by s.applied_on desc" }
+    ]
+  },
+  {
+    "name": "nitrogen",
+    "title": "Nitrogen this season",
+    "subtitle": "Synthetic N per hectare since 1 July, against the farm's cap",
+    "sections": [
+      { "title": "By paddock", "sql": "select paddock, land_use, area_ha, n_kg_ha, cap_kg_ha, decision from nitrogen_board order by n_kg_ha desc" },
+      { "title": "Applications", "sql": "select p.name paddock, x.applied_on, x.product, x.rate_kg_ha, x.n_percent, round(x.rate_kg_ha * x.n_percent / 100, 1) n_kg_ha, x.area_ha from fertiliser x join paddocks p on p.id = x.paddock_id cross join season s where x.applied_on between s.starts and s.ends order by x.applied_on" }
+    ]
+  },
+  {
+    "name": "stock",
+    "title": "Stock book",
+    "sections": [
+      { "title": "Mobs", "sql": "select name, species, stock_class, paddock, head, round(head * su_per_head, 1) stock_units, last_weighed, whp_clear from mob_summary order by name" },
+      { "title": "Liveweights", "sql": "select * from performance_board order by mob" },
+      { "title": "Recorded cash", "sql": "select *, sales - purchases - animal_health recorded_cash_margin from cost_board order by mob", "note": "Recorded purchases, animal health and sales only. Excludes stock valuation, labour, fertiliser and overheads." }
     ]
   }
 ]
